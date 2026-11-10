@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>2026학년도 2학년 학기말 교육과정 포털 - 배곧해솔중</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Pretendard Font CDN -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  
+  <style>
+    body {
+      font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { background-color: white !important; font-size: 11px !important; }
+    }
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 9999px; }
+    ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+    .tv-mode-canvas {
+      background: radial-gradient(circle at 50% 20%, #1e293b 0%, #0f172a 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen flex flex-col">
+
+  <!-- 긴급 공지 띠배너 (Ticker Banner) -->
+  <div id="urgentTicker" class="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-500 text-white text-xs py-2 px-4 shadow-sm no-print">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2 overflow-hidden">
+        <span class="px-2 py-0.5 rounded-full bg-black/20 text-[10px] font-extrabold uppercase shrink-0">긴급 필독 공지</span>
+        <div id="tickerText" class="truncate font-medium">
+          📢 <strong>[12/18 영화제]</strong> 팀구성표·스토리보드는 수업 전 <strong>4층 2학년 교무실 꽂이함</strong>에서 수령! | <strong>[에코백]</strong> 2교시 종료 후 바구니 교무실 반납
+        </div>
+      </div>
+      <button onclick="editTickerModal()" class="text-[11px] underline shrink-0 hover:text-amber-100 font-semibold">
+        <i class="fa-solid fa-pen-to-square mr-1"></i>공지 수정
+      </button>
+    </div>
+  </div>
+
+  <!-- 상단 헤더 -->
+  <header class="bg-slate-900 text-white shadow-lg sticky top-0 z-30 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-3.5 flex flex-col md:flex-row md:items-center md:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white text-xl shadow-md">
+          <i class="fa-solid fa-school"></i>
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-500/20 text-blue-300 border border-blue-400/30">배곧해솔중학교</span>
+            <h1 class="text-lg sm:text-xl font-bold tracking-tight">2026학년도 2학년 학기말 프로그램 운영 포털</h1>
+          </div>
+          <p class="text-xs text-slate-400">교사별 쪽지 없는 원스톱 시간표 · 수업 전/중/후 매뉴얼 · 학생 TV 상영 모드</p>
+        </div>
+      </div>
+
+      <!-- 우측 상단 빠른 도구 -->
+      <div class="flex items-center gap-2 no-print">
+        <button onclick="openGitHubGuideModal()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium border border-slate-700 transition flex items-center gap-1.5 text-slate-200">
+          <i class="fa-brands fa-github text-sm"></i>
+          <span>배포 가이드</span>
+        </button>
+        <button onclick="window.print()" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-xs font-medium border border-slate-700 transition flex items-center gap-1.5 text-slate-200">
+          <i class="fa-solid fa-print text-sm"></i>
+          <span>인쇄</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 네비게이션 3대 뷰 탭 -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 flex gap-2 overflow-x-auto text-xs font-semibold pb-2 border-t border-slate-800/80 pt-2 no-print">
+      <button id="nav-btn-schedule" onclick="switchMainTab('schedule')" class="px-4 py-2 rounded-xl bg-blue-600 text-white flex items-center gap-2 transition shadow-sm">
+        <i class="fa-regular fa-calendar-check"></i>
+        <span>학기말 종합 시간표 달력</span>
+      </button>
+      <button id="nav-btn-checkpoint" onclick="switchMainTab('checkpoint')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-2 transition">
+        <i class="fa-solid fa-clipboard-check text-amber-400"></i>
+        <span>오늘의 교사용 체크포인트 (준비물·간식·반납)</span>
+      </button>
+      <button id="nav-btn-hub" onclick="switchMainTab('hub')" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-2 transition">
+        <i class="fa-solid fa-folder-tree text-emerald-400"></i>
+        <span>14개 반별 드라이브 & 발표회 선곡 허브</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- 메인 컨텐츠 영역 -->
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-6 flex-1 w-full space-y-5">
+
+    <!-- TAB 1: 종합 시간표 달력 뷰 -->
+    <section id="tab-schedule" class="space-y-5">
+      <!-- 필터 바 -->
+      <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80 flex flex-col md:flex-row md:items-center justify-between gap-3 no-print">
+        <div class="flex items-center gap-1.5 overflow-x-auto text-xs">
+          <span class="text-slate-400 font-medium mr-1 shrink-0"><i class="fa-solid fa-filter mr-1"></i>활동 분류:</span>
+          <button onclick="setFilter('all')" id="tag-all" class="filter-btn px-3 py-1.5 rounded-xl font-bold bg-slate-900 text-white">전체</button>
+          <button onclick="setFilter('movie')" id="tag-movie" class="filter-btn px-3 py-1.5 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-cyan-800">🎬 영화제 준비/상영</button>
+          <button onclick="setFilter('ecobag')" id="tag-ecobag" class="filter-btn px-3 py-1.5 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-emerald-800">🌱 시 에코백 꾸미기</button>
+          <button onclick="setFilter('festival_show')" id="tag-festival_show" class="filter-btn px-3 py-1.5 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-purple-800">💃 학급 발표회/축제</button>
+          <button onclick="setFilter('magazine')" id="tag-magazine" class="filter-btn px-3 py-1.5 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-amber-800">📖 클래스매거진</button>
+          <button onclick="setFilter('safety')" id="tag-safety" class="filter-btn px-3 py-1.5 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-rose-800">🛡️ 보건/예방교육</button>
+        </div>
+        <div class="text-xs text-slate-500 bg-blue-50/70 text-blue-700 px-3 py-1.5 rounded-xl border border-blue-200 flex items-center gap-1.5">
+          <i class="fa-solid fa-lightbulb"></i>
+          <span>시간표의 <b>활동 칸을 클릭</b>하면 교사용 3단계 지침과 <b>학생 TV 화면</b>을 열 수 있습니다!</span>
+        </div>
+      </div>
+
+      <!-- 주차별 달력 테이블들 -->
+      <!-- 1주차 -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-800"><i class="fa-solid fa-flag text-blue-600 mr-1.5"></i>1주차 : 12월 15일(월) ~ 12월 19일(금)</span>
+          <span class="text-slate-500">지필평가 / 영화제 1차 기획(팀구성·스토리보드) 및 4차산업 진로탐색</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-center border-collapse min-w-[720px]">
+            <thead>
+              <tr class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold">
+                <th class="py-2.5 px-2 border-r border-slate-200 w-16">교시</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[18%]">15일(월)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[18%]">16일(화)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[18%]">17일(수)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[23%] text-blue-800 bg-blue-50/30">18일(목) ★핵심지도</th>
+                <th class="py-2.5 px-2 w-[23%]">19일(금)</th>
+              </tr>
+            </thead>
+            <tbody id="week1TableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 2주차 -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-800"><i class="fa-solid fa-flag text-indigo-600 mr-1.5"></i>2주차 : 12월 22일(월) ~ 12월 26일(금)</span>
+          <span class="text-slate-500">에코백 꾸미기 / 촬영·편집 마감(26일 자정) / 성탄절</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-center border-collapse min-w-[720px]">
+            <thead>
+              <tr class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold">
+                <th class="py-2.5 px-2 border-r border-slate-200 w-16">교시</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[20%] text-emerald-800 bg-emerald-50/20">22일(월) ★에코백</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[20%]">23일(화)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[20%]">24일(수)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[18%] text-rose-600 bg-rose-50/40">25일(목) 성탄절</th>
+                <th class="py-2.5 px-2 w-[22%] text-blue-800">26일(금) 마감일</th>
+              </tr>
+            </thead>
+            <tbody id="week2TableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 3주차 -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-800"><i class="fa-solid fa-flag text-purple-600 mr-1.5"></i>3주차 : 12월 29일(월) ~ 1월 2일(금)</span>
+          <span class="text-slate-500">반별 영상 상영·투표 / 학급 발표회 안무·합창 연습 / 학교 축제</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-center border-collapse min-w-[720px]">
+            <thead>
+              <tr class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold">
+                <th class="py-2.5 px-2 border-r border-slate-200 w-16">교시</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[20%]">29일(월)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[20%]">30일(화)</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[20%] text-indigo-700 bg-indigo-50/40">31일(수) 축제</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[18%] text-rose-600 bg-rose-50/40">1일(목) 신정</th>
+                <th class="py-2.5 px-2 w-[22%]">2일(금)</th>
+              </tr>
+            </thead>
+            <tbody id="week3TableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- 4주차 -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden">
+        <div class="bg-slate-50 px-4 py-2.5 border-b border-slate-200 flex items-center justify-between text-xs">
+          <span class="font-bold text-slate-800"><i class="fa-solid fa-flag text-rose-600 mr-1.5"></i>4주차 : 1월 5일(월) ~ 1월 7일(수)</span>
+          <span class="text-slate-500">영화제 시상식 / 학급 발표회 전체 공연 / 종업식</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-center border-collapse min-w-[720px]">
+            <thead>
+              <tr class="bg-slate-100/75 border-b border-slate-200 text-slate-600 font-semibold">
+                <th class="py-2.5 px-2 border-r border-slate-200 w-16">교시</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[33%] text-blue-800">5일(월) 영화제 시상식</th>
+                <th class="py-2.5 px-2 border-r border-slate-200 w-[33%] text-purple-800 bg-purple-50/30">6일(화) 학급 발표회 본공연</th>
+                <th class="py-2.5 px-2 w-[34%] text-slate-900 font-bold bg-slate-50">7일(수) 종업식</th>
+              </tr>
+            </thead>
+            <tbody id="week4TableBody" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 2: 오늘의 교사용 체크포인트 뷰 -->
+    <section id="tab-checkpoint" class="hidden space-y-5">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-amber-500"></i>
+              <span>교과·담임 선생님을 위한 당일 준비물 & 반납 원클릭 체크</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">교실에 들어가시기 전, 아래 세 가지만 확인하시면 별도 문의 없이 수업이 가능합니다.</p>
+          </div>
+          <!-- 날짜 빠른 선택 -->
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-slate-500 font-medium">확인 일자:</span>
+            <select id="checkpointDateSelect" onchange="renderCheckpoints()" class="text-xs font-bold border border-slate-300 rounded-xl px-3 py-1.5 bg-slate-50 focus:ring-2 focus:ring-blue-500">
+              <option value="1218">12월 18일(목) - 영화준비 & 예방교육</option>
+              <option value="1222">12월 22일(월) - 시 에코백 꾸미기</option>
+              <option value="1223">12월 23일(화) - 시나리오 촬영 & 발표회 연습</option>
+              <option value="1226">12월 26일(금) - 출품작 최종 마감</option>
+              <option value="1230">12월 30일(화) - 본선 투표</option>
+              <option value="0106">1월 6일(화) - 2학년 학급 발표회</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- 3단계 체크 카드 렌더링 영역 -->
+        <div id="checkpointCardsContainer" class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+          <!-- 동적 렌더링 -->
+        </div>
+      </div>
+
+      <!-- 간식 배부 기준 및 유의사항 요약 박스 -->
+      <div class="bg-gradient-to-br from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-5 shadow-sm space-y-3">
+        <div class="flex items-center gap-2 text-amber-900 font-bold text-sm">
+          <i class="fa-solid fa-cookie-bite text-amber-600 text-lg"></i>
+          <span>담당 교사용 간식 배부 및 학급 관리 퀵 매뉴얼</span>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs text-slate-700">
+          <div class="p-3 bg-white/80 rounded-xl border border-amber-200/60">
+            <span class="font-bold text-amber-800">🍬 에코백 꾸미기 간식 기준:</span>
+            <ul class="list-disc pl-4 mt-1 space-y-0.5 text-slate-600">
+              <li>1교시: 참여도 우수 학생 5명 선정 후 간식 배부</li>
+              <li>2교시: 시간 내 완성 확인된 학생에게 <strong>하리보 젤리 2개 + 미니 자유시간 2개</strong> 배부</li>
+            </ul>
+          </div>
+          <div class="p-3 bg-white/80 rounded-xl border border-amber-200/60">
+            <span class="font-bold text-purple-800">💃 학급 발표회(책상 이동):</span>
+            <ul class="list-disc pl-4 mt-1 space-y-0.5 text-slate-600">
+              <li>5교시: 연습 공간 확보 위해 책상을 앞/뒤로 밀도록 지도</li>
+              <li>6교시: 종례 전 책상을 반드시 원래 시험 대형으로 원상복구</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TAB 3: 14개 반별 드라이브 & 발표회 선곡 허브 -->
+    <section id="tab-hub" class="hidden space-y-5">
+      <div class="bg-white rounded-2xl p-5 shadow-sm border border-slate-200">
+        <div class="flex flex-col md:flex-row md:items-center justify-between gap-3 pb-4 border-b border-slate-200">
+          <div>
+            <h2 class="text-base font-bold text-slate-900 flex items-center gap-2">
+              <i class="fa-solid fa-folder-open text-blue-600"></i>
+              <span>14개 학급별 구글 드라이브 & 실시간 선곡 현황판</span>
+            </h2>
+            <p class="text-xs text-slate-500 mt-0.5">반별 과제 제출 드라이브 폴더와 학급 발표회 선착순 선곡(중복 방지)을 한곳에서 확인하세요.</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <button onclick="addSongPrompt()" class="px-3 py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-semibold flex items-center gap-1.5 shadow-sm transition">
+              <i class="fa-solid fa-plus"></i>
+              <span>우리 반 선곡 등록/수정</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 14개 반 카드 그리드 -->
+        <div id="classHubGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-7 gap-3 pt-4 text-xs">
+          <!-- JS 동적 생성 -->
+        </div>
+      </div>
+
+      <!-- 선곡 중복 방지 규칙 안내 -->
+      <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 text-xs text-purple-900 flex items-start gap-3">
+        <i class="fa-solid fa-circle-exclamation text-purple-600 text-base mt-0.5 shrink-0"></i>
+        <div>
+          <span class="font-bold">학급 발표회 선곡 원칙:</span>
+          <p class="mt-0.5 text-purple-800">"선곡은 <strong>먼저 결정하여 위 허브에 등록한 반에게 우선권</strong>이 있습니다!" 다른 반이 이미 등록한 곡은 중복 선택할 수 없으니 등록 전 위 표를 확인해 주시기 바랍니다.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- 통합 모달: 탭 구조 [1. 교사 지도 매뉴얼] vs [2. 교실 TV 학생 모드] -->
+  <div id="scheduleModal" class="fixed inset-0 bg-slate-900/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-5 hidden">
+    <div class="bg-white w-full max-w-3xl rounded-3xl shadow-2xl border border-slate-100 overflow-hidden flex flex-col max-h-[92vh]">
+      
+      <!-- 모달 상단 탭 헤더 -->
+      <div class="px-5 py-3.5 bg-slate-900 text-white flex items-center justify-between shrink-0">
+        <div class="flex items-center gap-2">
+          <span id="modalCategoryBadge" class="px-2 py-0.5 rounded text-[11px] font-bold bg-blue-500/30 text-blue-200 border border-blue-400/30">분류</span>
+          <h3 id="modalTitle" class="text-sm sm:text-base font-bold truncate">프로그램명</h3>
+        </div>
+        <div class="flex items-center gap-1">
+          <!-- 모달 내부 탭 전환 버튼 -->
+          <div class="flex bg-slate-800 p-0.5 rounded-xl border border-slate-700 text-xs mr-2">
+            <button id="modalTabTeacherBtn" onclick="switchModalInnerTab('teacher')" class="px-3 py-1 rounded-lg bg-blue-600 text-white font-semibold transition">
+              <i class="fa-solid fa-chalkboard-user mr-1"></i>교사 매뉴얼
+            </button>
+            <button id="modalTabTvBtn" onclick="switchModalInnerTab('tv')" class="px-3 py-1 rounded-lg text-slate-300 hover:text-white font-medium transition">
+              <i class="fa-solid fa-tv mr-1 text-emerald-400"></i>교실 TV 상영
+            </button>
+          </div>
+          <button onclick="closeModal()" class="text-slate-400 hover:text-white p-1.5 rounded-lg transition">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- 모달 내부 본문 -->
+      <div class="p-5 overflow-y-auto space-y-4 text-xs flex-1">
+        
+        <!-- [내부 탭 1] 교사용 3단계 실무 매뉴얼 -->
+        <div id="modalTeacherView" class="space-y-4">
+          <!-- 일시 배지 -->
+          <div class="flex items-center justify-between bg-slate-50 p-3 rounded-2xl border border-slate-200">
+            <div class="flex items-center gap-2 font-bold text-slate-800 text-xs">
+              <i class="fa-regular fa-clock text-blue-600"></i>
+              <span id="modalDateTime">12월 18일(목) 2교시</span>
+            </div>
+            <span id="modalLocationNotice" class="text-blue-700 bg-blue-100/70 font-semibold px-2.5 py-1 rounded-full text-[11px]">
+              수령장소: 4층 2학년 교무실
+            </span>
+          </div>
+
+          <!-- 3단계 액션 카드 -->
+          <div class="grid grid-cols-1 gap-3">
+            <!-- 1. 수업 전 준비 -->
+            <div class="p-3.5 rounded-2xl bg-blue-50/60 border border-blue-200 space-y-1">
+              <div class="flex items-center gap-1.5 text-blue-900 font-bold">
+                <i class="fa-solid fa-box-open text-blue-600"></i>
+                <span>① [수업 전] 챙겨갈 물품 & 양식</span>
+              </div>
+              <p id="modalStepBefore" class="text-slate-700 font-medium pl-5 leading-relaxed whitespace-pre-line">
+                내용이 표시됩니다.
+              </p>
+            </div>
+
+            <!-- 2. 수업 중 지도 -->
+            <div class="p-3.5 rounded-2xl bg-amber-50/60 border border-amber-200 space-y-1">
+              <div class="flex items-center gap-1.5 text-amber-900 font-bold">
+                <i class="fa-solid fa-person-chalkboard text-amber-600"></i>
+                <span>② [수업 중] 학생 지도 & 상영 동영상</span>
+              </div>
+              <p id="modalStepDuring" class="text-slate-700 font-medium pl-5 leading-relaxed whitespace-pre-line">
+                내용이 표시됩니다.
+              </p>
+              <div id="modalVideoLinksArea" class="pt-2 pl-5 flex flex-wrap gap-2">
+                <!-- 비디오 링크 버튼들 동적 주입 -->
+              </div>
+            </div>
+
+            <!-- 3. 수업 후 마감 & 간식 -->
+            <div class="p-3.5 rounded-2xl bg-emerald-50/60 border border-emerald-200 space-y-1">
+              <div class="flex items-center gap-1.5 text-emerald-900 font-bold">
+                <i class="fa-solid fa-gift text-emerald-600"></i>
+                <span>③ [수업 후] 반납 / 사진 제출 / 간식 배부</span>
+              </div>
+              <p id="modalStepAfter" class="text-slate-700 font-medium pl-5 leading-relaxed whitespace-pre-line">
+                내용이 표시됩니다.
+              </p>
+            </div>
+          </div>
+
+          <!-- 첨부 링크 바로가기 리스트 -->
+          <div class="border-t border-slate-200 pt-3">
+            <span class="font-bold text-slate-700 block mb-2"><i class="fa-solid fa-paperclip text-slate-400 mr-1"></i>관련 드라이브 및 서식 링크</span>
+            <div id="modalLinksList" class="flex flex-wrap gap-2"></div>
+          </div>
+        </div>
+
+        <!-- [내부 탭 2] 교실 TV 학생 상영 모드 (Full Screen Friendly) -->
+        <div id="modalTvView" class="hidden tv-mode-canvas text-white p-5 rounded-2xl border border-slate-700 space-y-5">
+          <div class="text-center space-y-1">
+            <span class="px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-300 border border-blue-400/40 text-[11px] font-bold">오늘의 학급 활동 안내</span>
+            <h2 id="tvTitle" class="text-xl sm:text-2xl font-black text-amber-300">활동 제목</h2>
+            <p id="tvSubtitle" class="text-xs sm:text-sm text-slate-300">학생들은 선생님의 지시에 따라 규칙을 지켜 참여해 주세요.</p>
+          </div>
+
+          <!-- TV용 메인 가이드 박스 -->
+          <div id="tvContentBox" class="bg-white/10 backdrop-blur-md rounded-2xl p-4 sm:p-6 border border-white/10 space-y-4 text-xs sm:text-sm">
+            <!-- 동적 삽입 (에코백 예시 그림 카드 or 발표회 역할 룰 or 영화제 팀별 미션) -->
+          </div>
+
+          <!-- TV 모드 하단 액션 버튼 -->
+          <div class="flex items-center justify-between text-xs pt-2">
+            <span class="text-slate-400">배곧해솔중학교 2학년 자치 프로그램</span>
+            <button onclick="toggleBrowserFullscreen()" class="px-3 py-1.5 rounded-xl bg-white/20 hover:bg-white/30 text-white font-bold transition flex items-center gap-1.5">
+              <i class="fa-solid fa-expand"></i>
+              <span>전체화면 확대</span>
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 모달 푸터 -->
+      <div class="px-5 py-3 bg-slate-50 border-t border-slate-200 flex items-center justify-between shrink-0">
+        <span class="text-[11px] text-slate-500">배곧해솔중 2학년부 | 문의: 학기말 담당 교사</span>
+        <button onclick="closeModal()" class="px-4 py-1.5 bg-slate-800 hover:bg-slate-900 text-white rounded-xl text-xs font-bold transition">
+          닫기
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 깃허브 배포 가이드 모달 -->
+  <div id="githubGuideModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white w-full max-w-lg rounded-3xl shadow-2xl border border-slate-100 p-6 space-y-4 text-xs">
+      <div class="flex items-center justify-between border-b border-slate-200 pb-3">
+        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-brands fa-github text-xl"></i>
+          <span>깃허브(GitHub Pages) 3분 배포 방법</span>
+        </h3>
+        <button onclick="closeGitHubGuideModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <p class="text-slate-600 leading-relaxed">
+        이 파일(<code class="bg-slate-100 px-1 py-0.5 rounded text-blue-600 font-mono">index.html</code>) 하나만 깃허브에 올리면, 14개 반 선생님들이 스마트폰이나 교실 컴퓨터로 접속 가능한 <strong>공식 웹사이트 주소</strong>가 무료로 즉시 생성됩니다.
+      </p>
+      <ol class="list-decimal pl-4 space-y-2 text-slate-700 leading-relaxed">
+        <li>GitHub.com 로그인 후 우측 상단 <strong>[New repository]</strong> 클릭</li>
+        <li>Repository name에 <code class="bg-slate-100 px-1 font-mono text-blue-600">haesol2-endterm</code> 입력, <strong>Public</strong> 체크 후 생성</li>
+        <li><strong>uploading an existing file</strong> 링크로 이 <strong>index.html</strong> 파일 업로드 & 저장</li>
+        <li>저장소 상단 <strong>Settings</strong> &rarr; 좌측 <strong>Pages</strong> 메뉴 클릭</li>
+        <li>Branch에서 <strong>main</strong> 선택 후 <strong>Save</strong> 클릭</li>
+        <li>1~2분 뒤 나타나는 웹사이트 주소를 교내 메신저에 공유하시면 끝납니다!</li>
+      </ol>
+      <div class="text-right pt-2">
+        <button onclick="closeGitHubGuideModal()" class="px-4 py-2 bg-blue-600 text-white rounded-xl font-bold">확인 완료</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 푸터 -->
+  <footer class="bg-white border-t border-slate-200 py-4 text-center text-xs text-slate-400 no-print">
+    <div class="max-w-7xl mx-auto px-4">
+      <p>2026학년도 배곧해솔중학교 2학년 학기말 프로그램 포털 · 교무실 문의: 4층 2학년부 교무실</p>
+    </div>
+  </footer>
+
+  <!-- 알림 토스트 -->
+  <div id="toast" class="fixed bottom-5 right-5 bg-slate-900 text-white px-4 py-2 rounded-xl text-xs shadow-xl opacity-0 transform translate-y-10 transition duration-300 pointer-events-none z-50 flex items-center gap-2">
+    <i class="fa-solid fa-circle-check text-emerald-400"></i>
+    <span id="toastMsg">알림 메시지</span>
+  </div>
+
+  <!-- 4. 스크립트 데이터 및 프론트 로직 -->
+  <script>
+    // 14개 반 발표회 선곡 데이터 (LocalStorage 연동)
+    const DEFAULT_SONGS = [
+      { classNum: 1, song: "DAY6 - 한 페이지가 될 수 있게", status: "확정" },
+      { classNum: 2, song: "NewJeans - Hype Boy (플래시몹)", status: "확정" },
+      { classNum: 3, song: "윤도현밴드 - 나는 나비 (합창)", status: "확정" },
+      { classNum: 4, song: "미정 (선곡 협의 중)", status: "대기" },
+      { classNum: 5, song: "IVE - I AM", status: "확정" },
+      { classNum: 6, song: "미정 (선곡 협의 중)", status: "대기" },
+      { classNum: 7, song: "지코 - 새삥", status: "확정" },
+      { classNum: 8, song: "이무진 - 신호등 (떼창)", status: "확정" },
+      { classNum: 9, song: "미정 (선곡 협의 중)", status: "대기" },
+      { classNum: 10, song: "SEVENTEEN - 아주 NICE", status: "확정" },
+      { classNum: 11, song: "미정", status: "대기" },
+      { classNum: 12, song: "미정", status: "대기" },
+      { classNum: 13, song: "미정", status: "대기" },
+      { classNum: 14, song: "미정", status: "대기" }
+    ];
+
+    // 종합 일정 데이터 (선생님 이미지 및 지도 유의사항 100% 반영)
+    const SCHEDULE_DATA = [
+      // 1주차
+      { id: "1215-exam", date: "12/15", day: "월", period: "1~4교시", title: "2학기 2차 지필평가 1일차", cat: "exam", catLabel: "지필평가", 
+        before: "시험 감독 시간표 및 해당 교실 답안지 수령", during: "부정행위 예방 및 방송 타종 엄수", after: "답안지 서명 후 연구부 제출", links: [] },
+      { id: "1216-exam", date: "12/16", day: "화", period: "1~4교시", title: "2학기 2차 지필평가 2일차", cat: "exam", catLabel: "지필평가", 
+        before: "감독 시간표 확인", during: "답안지 마킹 확인", after: "답안지 인계", links: [] },
+      { id: "1217-exam", date: "12/17", day: "수", period: "1~4교시", title: "지필평가 3일차 종료", cat: "exam", catLabel: "지필평가", 
+        before: "마지막 평가 감독", during: "종료 후 책상 줄맞추기", after: "학생 분실물 점검", links: [] },
+      { id: "1217-p5", date: "12/17", day: "수", period: "5교시", title: "장애이해교육", cat: "safety", catLabel: "예방/소양", 
+        before: "교실 TV 방송 수신 상태 확인", during: "통합교육 장애이해 영상 시청 지도", after: "소감 한 줄 기록", links: [{ label: "장애이해 영상", url: "https://youtube.com" }] },
+      { id: "1217-p6", date: "12/17", day: "수", period: "6교시", title: "학급자치(축제관련)", cat: "festival_show", catLabel: "자치회의", 
+        before: "학급 회장/부회장 진행 준비", during: "학기말 꿈끼 축제 부스 아이디어 회의", after: "부스 기획서 학생회 제출", links: [] },
+
+      // 12/18(목) - 핵심 지도
+      { id: "1218-p1", date: "12/18", day: "목", period: "1교시", title: "마약예방교육", cat: "safety", catLabel: "예방교육", 
+        before: "보건실 제공 시청각 자료 링크 확인", during: "청소년 마약류 오남용 예방 영상 상영", after: "간단한 예방 서약 작성", links: [{ label: "마약예방 시청각", url: "https://youtube.com" }] },
+      { id: "1218-p2", date: "12/18", day: "목", period: "2교시", title: "영화준비 (팀구성)", cat: "movie", catLabel: "영화제", 
+        before: "★ 각 반 [팀구성표 양식]을 수업 전 [4층 2학년 교무실 꽂이함]에서 반드시 챙겨가셔야 합니다.",
+        during: "반별 5개 팀(팀당 4~7명) 구성 지도\n팀장, 팀역할, 팀명 선정(양식에 기재)",
+        after: "★ 작성 완료된 팀구성표는 각 학급 회장이 사진을 찍어 구글드라이브 학급 폴더에 [19일(금) 09:00까지] 올리도록 안내!",
+        links: [{ label: "[구글드라이브] 팀구성표 업로드 폴더", url: "https://drive.google.com" }, { label: "[양식] 팀구성표 서식", url: "#" }],
+        tvType: "movie_team" },
+      { id: "1218-p3", date: "12/18", day: "목", period: "3교시", title: "영화준비 (스토리보드)", cat: "movie", catLabel: "영화제", 
+        before: "★ [스토리보드 양식]을 수업 전 [4층 2학년 교무실 꽂이함]에서 챙겨가셔야 합니다.",
+        during: "수업 시작하자마자 아래 12분 샘플 영상을 틀어주세요!\n영상 시청 후 팀별 스토리보드 작성 지도",
+        after: "★ 작성 완료된 스토리보드는 각 팀장이 사진을 찍어 구글 드라이브 학급 폴더에 [22일(월) 09:00까지] 올리도록 지도!",
+        links: [{ label: "▶ [샘플영상] 12/18 3교시 12분 영상파일", url: "https://drive.google.com/drive/u/0/folders/1tOma6EhbZReAMMBYOk7Q-DBAzkBpcafe" }, { label: "[구글드라이브] 스토리보드 사진 폴더", url: "https://drive.google.com" }],
+        tvType: "movie_storyboard" },
+      { id: "1218-p4", date: "12/18", day: "목", period: "4교시", title: "학교폭력예방교육", cat: "safety", catLabel: "예방교육", 
+        before: "예방교육 방송 점검", during: "사이버폭력 예방 동영상 시청", after: "교과서 서식 작성", links: [] },
+      { id: "1218-p56", date: "12/18", day: "목", period: "5~6교시", title: "미술교과대회", cat: "regular", catLabel: "교과대회", 
+        before: "미술과 배부 도화지 챙기기", during: "교내 미술대회 작품 창작 지도", after: "완성작 미술실 수합", links: [] },
+
+      // 12/19(금)
+      { id: "1219-p14", date: "12/19", day: "금", period: "1~4교시", title: "4차산업과 미래직업탐색", cat: "regular", catLabel: "진로탐색", 
+        before: "반별 교차 진행 일정 확인 필수!", during: "(1-2교시) 1~7반 직업탐색 / 8~14반 교과수업\n(3-4교시) 8~14반 직업탐색 / 1~7반 교과수업", after: "진로 활동지 기록", links: [] },
+      { id: "1219-p56", date: "12/19", day: "금", period: "5~6교시", title: "동아리 / 스포츠", cat: "regular", catLabel: "동아리", 
+        before: "동아리실 및 체육관 이동 지도", during: "활동 안전 지도", after: "출석 확인", links: [] },
+
+      // 12/22(월) - 에코백 활동
+      { id: "1222-p1", date: "12/22", day: "월", period: "1교시", title: "시 에코백 꾸미기 (1교시)", cat: "ecobag", catLabel: "에코백", 
+        before: "★ 학년부 바구니(에코백, 패브릭 마카)를 4층 2학년 교무실에서 챙겨 교실로 입실!",
+        during: "태블릿PC를 활용해 마음에 드는 시 구절 선정\n★ 에코백 [뒷면]에 시 구절을 적고 꾸미도록 안내 (앞면 아님!)",
+        after: "★ 열심히 참여하는 학생 5명에게 간식 배부!",
+        links: [{ label: "에코백 활동 안내서", url: "#" }],
+        tvType: "ecobag_step1" },
+      { id: "1222-p2", date: "12/22", day: "월", period: "2교시", title: "시 에코백 꾸미기 (2교시)", cat: "ecobag", catLabel: "에코백", 
+        before: "1교시 작업 상태 확인 및 바구니 확인",
+        during: "에코백 앞면 그림 채색 및 뒷면 시 구절 완성 지도\n시간 내 완성도 높게 완성하도록 독려",
+        after: "★ 완성 확인된 학생에게 간식(하리보 젤리 2개 + 미니 자유시간 2개) 배부!\n★ 활동 후 학년부 바구니(남은 에코백/마카) 2학년부 교무실로 반납!",
+        links: [],
+        tvType: "ecobag_step2" },
+      { id: "1222-p34", date: "12/22", day: "월", period: "3~4교시", title: "교과수업", cat: "regular", catLabel: "교과수업", 
+        before: "교과 진도", during: "학기말 마무리 수업", after: "정리", links: [] },
+      { id: "1222-p56", date: "12/22", day: "월", period: "5~6교시", title: "클래스매거진 만들기 (기획)", cat: "magazine", catLabel: "매거진", 
+        before: "학급 매거진 제작 가이드 확인", during: "5교시: 매거진 주제 정하기\n6교시: 팀별/개인별 역할 정하기", after: "역할 분담표 취합", links: [{ label: "매거진 템플릿", url: "https://canva.com" }] },
+
+      // 12/23(화)
+      { id: "1223-p1", date: "12/23", day: "화", period: "1교시", title: "흡연예방교육", cat: "safety", catLabel: "예방교육", 
+        before: "금연 영상 준비", during: "전자담배 유해성 교육", after: "기록 확인", links: [] },
+      { id: "1223-p24", date: "12/23", day: "화", period: "2~4교시", title: "시나리오 작성 및 영상 촬영", cat: "movie", catLabel: "영화제", 
+        before: "팀별 촬영 장소 확인 (교실 칠판에 적게 하기)",
+        during: "★ 반드시 팀별 촬영 장소를 물어봐 주시고 교내 순회지도 부탁드립니다! (교외 이탈 금지, 안전사고 유의)",
+        after: "촬영 장비 점검 및 교실 복귀 확인", links: [] },
+      { id: "1223-p56", date: "12/23", day: "화", period: "5~6교시", title: "학급 발표회 안무·선곡 연습", cat: "festival_show", catLabel: "학급발표회", 
+        before: "선곡 중복 여부 허브에서 확인!",
+        during: "합창, 플래시몹 등 학급 전원 참여 연습\n★ 5교시 시작 시 책상을 앞·뒤로 밀고 연습 공간 확보!",
+        after: "★ 6교시 종료 전 책상을 반드시 원래대로 복구!", links: [],
+        tvType: "festival_practice" },
+
+      // 12/24(수)
+      { id: "1224-p14", date: "12/24", day: "수", period: "1~4교시", title: "영상편집하기 & 포스터 제작", cat: "movie", catLabel: "영화제", 
+        before: "태블릿 충전 확인", during: "스마트폰 캡컷/비타 앱 활용 편집 지도 및 영화 포스터 제작", after: "초안 저장 확인", links: [] },
+      { id: "1224-p56", date: "12/24", day: "수", period: "5~6교시", title: "클래스매거진 본문 작성", cat: "magazine", catLabel: "매거진", 
+        before: "작성 원고 배부", during: "기사 작성 및 레이아웃 정리", after: "원고 1차 수합", links: [] },
+
+      // 12/25(목) 성탄절
+      { id: "1225-holiday", date: "12/25", day: "목", period: "전일", title: "🎄 성탄절 (공휴일)", cat: "holiday", catLabel: "공휴일", 
+        before: "-", during: "성탄절 휴무입니다.", after: "-", links: [] },
+
+      // 12/26(금)
+      { id: "1226-p12", date: "12/26", day: "금", period: "1~2교시", title: "클래스매거진 취합", cat: "magazine", catLabel: "매거진", 
+        before: "미제출자 확인", during: "사진 및 본문 최종 편집", after: "인쇄용 파일 변환", links: [] },
+      { id: "1226-p34", date: "12/26", day: "금", period: "3~4교시", title: "영상·포스터 마감 안내", cat: "movie", catLabel: "영화제 마감", 
+        before: "제출 링크 QR코드 게시",
+        during: "★ 26일 오늘 자정까지 영상 및 포스터를 반별 드라이브로 제출해야 함을 강조!\n※ 진도 여유 시 교과 시간에도 작업 시간 부여 가능",
+        after: "최종 렌더링 파일 확인", links: [{ label: "[구글드라이브] 최종 영상/포스터 제출처", url: "https://drive.google.com" }] },
+
+      // 12/29(월)
+      { id: "1229-p13", date: "12/29", day: "월", period: "1~3교시", title: "클래스매거진 마무리", cat: "magazine", catLabel: "매거진", 
+        before: "교정교열 준비", during: "최종 원고 점검", after: "인쇄소 전달", links: [] },
+      { id: "1229-p56", date: "12/29", day: "월", period: "5~6교시", title: "반별 영상 시청 및 1개 선정", cat: "movie", catLabel: "영화제 투표", 
+        before: "반별 5개 팀 출품작 영상 링크 준비",
+        during: "반별 5개 작품 시청 후 투표를 진행하여 학급 대표 1개 영상 선정!",
+        after: "선정된 대표작 1개 번호 담당계에 전달", links: [{ label: "반별 1차 투표 구글폼", url: "https://forms.google.com" }] },
+
+      // 12/30(화)
+      { id: "1230-p24", date: "12/30", day: "화", period: "2~4교시", title: "14개 반 대표 영상 본선 시청 및 인기상 투표", cat: "movie", catLabel: "영화제 본선", 
+        before: "본선 영상 14개 통합 재생 링크 띄우기",
+        during: "14개 반 대표작 시청 및 전교생 인기상 투표 참여 지도 (교사 심사위원 채점 병행)",
+        after: "온라인 투표 참여율 확인", links: [{ label: "14개반 대표작 모음", url: "#" }, { label: "인기상 전교생 투표 링크", url: "https://forms.google.com" }] },
+      
+      // 12/31 축제, 1/1 신정
+      { id: "1231-fest", date: "12/31", day: "수", period: "전일", title: "🎉 해솔 꿈끼 한마당 축제", cat: "festival_show", catLabel: "축제", 
+        before: "부스 운영 물품 수령", during: "체험 부스 및 공연 관람 안전지도", after: "교실 정리", links: [] },
+      { id: "0101-hol", date: "1/1", day: "목", period: "전일", title: "☀️ 신정 (공휴일)", cat: "holiday", catLabel: "공휴일", before: "-", during: "-", after: "-", links: [] },
+
+      // 1/5(월) 영화제 시상식
+      { id: "0105-p12", date: "1/5", day: "월", period: "1~2교시", title: "🎬 2026 해솔 영화제 시상식", cat: "movie", catLabel: "영화제 시상", 
+        before: "방송실 중계 링크 세팅", during: "시상식, 우수작 발표, 연기상/인기상 발표 시청", after: "수상 학생 축하", links: [{ label: "시상식 라이브 방송", url: "#" }] },
+
+      // 1/6(화) 학급 발표회 본공연
+      { id: "0106-p4", date: "1/6", day: "화", period: "4교시", title: "영화제 소감문 작성 (QR)", cat: "movie", catLabel: "소감문", 
+        before: "소감문 설문 QR코드 칠판 게시", during: "학생 전원 설문 및 소감문 작성 지도", after: "제출 확인", links: [{ label: "소감문 작성 QR 링크", url: "https://forms.google.com" }] },
+      { id: "0106-p56", date: "1/6", day: "화", period: "5~6교시", title: "★ 2학년 학급 발표회 본공연", cat: "festival_show", catLabel: "학급발표회", 
+        before: "강당/교실 무대 음원 세팅 점검",
+        during: "1~14반 학급 단체 합창·플래시몹 발표회 관람 및 심사",
+        after: "1,2,3등 반 상품 수여 및 격려", links: [{ label: "레전드 참고 영상 1", url: "https://www.youtube.com/watch?v=jHgEbH_wILw" }, { label: "레전드 참고 영상 2", url: "https://www.youtube.com/watch?v=VUpqajQ9Eng" }],
+        tvType: "festival_rules" },
+
+      // 1/7(수) 종업식
+      { id: "0107-p14", date: "1/7", day: "수", period: "1~4교시", title: "🎓 2026학년도 종업식", cat: "regular", catLabel: "종업식", 
+        before: "통지표 및 방학 안내문 준비", during: "종업식 방송 및 겨울방학 안전수칙 안내", after: "교실 소등 및 안전 하교", links: [] }
+    ];
+
+    let currentFilter = 'all';
+    let currentModalItem = null;
+
+    // 초기 실행
+    window.onload = function() {
+      initTicker();
+      renderAllTables();
+      renderCheckpoints();
+      renderClassHub();
+    };
+
+    // 1. 네비게이션 탭 전환
+    function switchMainTab(tab) {
+      document.getElementById('tab-schedule').classList.add('hidden');
+      document.getElementById('tab-checkpoint').classList.add('hidden');
+      document.getElementById('tab-hub').classList.add('hidden');
+
+      document.getElementById('nav-btn-schedule').className = "px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-2 transition";
+      document.getElementById('nav-btn-checkpoint').className = "px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-2 transition";
+      document.getElementById('nav-btn-hub').className = "px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 flex items-center gap-2 transition";
+
+      document.getElementById(`tab-${tab}`).classList.remove('hidden');
+      document.getElementById(`nav-btn-${tab}`).className = "px-4 py-2 rounded-xl bg-blue-600 text-white flex items-center gap-2 transition shadow-sm font-bold";
+    }
+
+    // 2. 시간표 렌더링
+    function renderAllTables() {
+      renderWeekTable("week1TableBody", [
+        { p: "1교시", d: ["1215-exam", "1216-exam", "1217-exam", "1218-p1", "1219-p14"] },
+        { p: "2교시", d: ["1215-exam", "1216-exam", "1217-exam", "1218-p2", "1219-p14"] },
+        { p: "3교시", d: ["1215-exam", "1216-exam", "1217-exam", "1218-p3", "1219-p14"] },
+        { p: "4교시", d: ["1215-exam", "1216-exam", "1217-exam", "1218-p4", "1219-p14"] },
+        { p: "5교시", d: [null, null, "1217-p5", "1218-p56", "1219-p56"] },
+        { p: "6교시", d: [null, null, "1217-p6", "1218-p56", "1219-p56"] }
+      ]);
+
+      renderWeekTable("week2TableBody", [
+        { p: "1교시", d: ["1222-p1", "1223-p1", "1224-p14", "1225-holiday", "1226-p12"] },
+        { p: "2교시", d: ["1222-p2", "1223-p24", "1224-p14", "1225-holiday", "1226-p12"] },
+        { p: "3교시", d: ["1222-p34", "1223-p24", "1224-p14", "1225-holiday", "1226-p34"] },
+        { p: "4교시", d: ["1222-p34", "1223-p24", "1224-p14", "1225-holiday", "1226-p34"] },
+        { p: "5교시", d: ["1222-p56", "1223-p56", "1224-p56", "1225-holiday", "1226-p56"] },
+        { p: "6교시", d: ["1222-p56", "1223-p56", "1224-p56", "1225-holiday", "1226-p56"] }
+      ]);
+
+      renderWeekTable("week3TableBody", [
+        { p: "1교시", d: ["1229-p13", "1230-p24", "1231-fest", "0101-hol", null] },
+        { p: "2교시", d: ["1229-p13", "1230-p24", "1231-fest", "0101-hol", null] },
+        { p: "3교시", d: ["1229-p13", "1230-p24", "1231-fest", "0101-hol", null] },
+        { p: "4교시", d: [null, "1230-p24", "1231-fest", "0101-hol", null] },
+        { p: "5교시", d: ["1229-p56", null, "1231-fest", "0101-hol", null] },
+        { p: "6교시", d: ["1229-p56", null, "1231-fest", "0101-hol", null] }
+      ]);
+
+      renderWeekTable("week4TableBody", [
+        { p: "1교시", d: ["0105-p12", null, "0107-p14"] },
+        { p: "2교시", d: ["0105-p12", null, "0107-p14"] },
+        { p: "3교시", d: [null, null, "0107-p14"] },
+        { p: "4교시", d: [null, "0106-p4", "0107-p14"] },
+        { p: "5교시", d: [null, "0106-p56", null] },
+        { p: "6교시", d: [null, "0106-p56", null] }
+      ]);
+    }
+
+    function renderWeekTable(tbodyId, rows) {
+      const tbody = document.getElementById(tbodyId);
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = "hover:bg-slate-50/70 transition";
+
+        // 교시 칸
+        const tdP = document.createElement('td');
+        tdP.className = "py-2 px-1 border-r border-slate-200 font-bold bg-slate-50 text-slate-500 text-[11px]";
+        tdP.textContent = r.p;
+        tr.appendChild(tdP);
+
+        r.d.forEach(itemId => {
+          const td = document.createElement('td');
+          td.className = "py-1.5 px-2 border-r border-slate-200 last:border-r-0 align-middle";
+
+          if (!itemId) {
+            td.innerHTML = `<span class="text-slate-300 text-[11px]">-</span>`;
+          } else {
+            const item = SCHEDULE_DATA.find(i => i.id === itemId);
+            if (item) {
+              const style = getCategoryBadge(item.cat);
+              const isMatch = (currentFilter === 'all' || item.cat === currentFilter);
+              const opacity = isMatch ? 'opacity-100 ring-1 ring-slate-200' : 'opacity-25 grayscale';
+
+              td.innerHTML = `
+                <div onclick="openScheduleModal('${item.id}')" 
+                     class="cursor-pointer p-2 rounded-xl border ${style.bg} ${opacity} transition shadow-sm hover:shadow text-left group">
+                  <div class="flex items-center justify-between text-[10px] text-slate-500 mb-0.5">
+                    <span class="font-bold px-1 rounded ${style.badge}">${item.catLabel}</span>
+                    ${item.tvType ? '<i class="fa-solid fa-tv text-emerald-600" title="TV 상영 모드 지원"></i>' : ''}
+                  </div>
+                  <div class="font-bold text-[11px] sm:text-xs truncate group-hover:text-blue-600 transition text-slate-800">${item.title}</div>
+                </div>
+              `;
+            }
+          }
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function getCategoryBadge(cat) {
+      switch(cat) {
+        case 'movie': return { bg: 'bg-cyan-50 hover:bg-cyan-100 text-cyan-900 border-cyan-200', badge: 'bg-cyan-100 text-cyan-800' };
+        case 'ecobag': return { bg: 'bg-emerald-50 hover:bg-emerald-100 text-emerald-900 border-emerald-200', badge: 'bg-emerald-100 text-emerald-800' };
+        case 'festival_show': return { bg: 'bg-purple-50 hover:bg-purple-100 text-purple-900 border-purple-200', badge: 'bg-purple-100 text-purple-800' };
+        case 'magazine': return { bg: 'bg-amber-50 hover:bg-amber-100 text-amber-900 border-amber-200', badge: 'bg-amber-100 text-amber-800' };
+        case 'safety': return { bg: 'bg-rose-50 hover:bg-rose-100 text-rose-900 border-rose-200', badge: 'bg-rose-100 text-rose-800' };
+        case 'holiday': return { bg: 'bg-red-50 text-red-800 border-red-200', badge: 'bg-red-100 text-red-800' };
+        default: return { bg: 'bg-slate-50 hover:bg-slate-100 text-slate-800 border-slate-200', badge: 'bg-slate-200 text-slate-700' };
+      }
+    }
+
+    function setFilter(cat) {
+      currentFilter = cat;
+      document.querySelectorAll('.filter-btn').forEach(btn => {
+        btn.className = "filter-btn px-3 py-1.5 rounded-xl font-medium bg-slate-100 hover:bg-slate-200 text-slate-700";
+      });
+      document.getElementById(`tag-${cat}`).className = "filter-btn px-3 py-1.5 rounded-xl font-bold bg-slate-900 text-white";
+      renderAllTables();
+    }
+
+    // 3. 오늘의 교사용 체크포인트 렌더링
+    function renderCheckpoints() {
+      const selected = document.getElementById('checkpointDateSelect').value;
+      const container = document.getElementById('checkpointCardsContainer');
+      container.innerHTML = '';
+
+      let items = [];
+      if (selected === '1218') {
+        items = SCHEDULE_DATA.filter(i => i.id.startsWith('1218'));
+      } else if (selected === '1222') {
+        items = SCHEDULE_DATA.filter(i => i.id.startsWith('1222'));
+      } else if (selected === '1223') {
+        items = SCHEDULE_DATA.filter(i => i.id.startsWith('1223'));
+      } else if (selected === '1226') {
+        items = SCHEDULE_DATA.filter(i => i.id.startsWith('1226'));
+      } else if (selected === '1230') {
+        items = SCHEDULE_DATA.filter(i => i.id.startsWith('1230'));
+      } else if (selected === '0106') {
+        items = SCHEDULE_DATA.filter(i => i.id.startsWith('0106'));
+      }
+
+      items.forEach(item => {
+        const card = document.createElement('div');
+        card.className = "bg-slate-50 rounded-2xl p-4 border border-slate-200/90 shadow-sm space-y-2.5 flex flex-col justify-between";
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-700 bg-blue-100/70 px-2 py-0.5 rounded text-[11px]">${item.period}</span>
+              <span class="text-[11px] text-slate-400 font-medium">${item.catLabel}</span>
+            </div>
+            <h4 class="font-bold text-slate-900 text-sm mt-1 mb-2">${item.title}</h4>
+            
+            <div class="space-y-1.5 text-[11px]">
+              <div class="p-2 bg-blue-50/80 rounded-xl border border-blue-100 text-blue-900">
+                <span class="font-bold block text-blue-700">📦 [수업 전 챙길 것]</span>
+                ${item.before}
+              </div>
+              <div class="p-2 bg-amber-50/80 rounded-xl border border-amber-100 text-amber-900">
+                <span class="font-bold block text-amber-700">🎯 [수업 중 핵심]</span>
+                ${item.during}
+              </div>
+              <div class="p-2 bg-emerald-50/80 rounded-xl border border-emerald-100 text-emerald-900">
+                <span class="font-bold block text-emerald-700">🎁 [수업 후 반납/제출/간식]</span>
+                ${item.after}
+              </div>
+            </div>
+          </div>
+          <button onclick="openScheduleModal('${item.id}')" class="w-full mt-2 py-1.5 bg-slate-900 hover:bg-blue-600 text-white rounded-xl font-semibold text-[11px] transition flex items-center justify-center gap-1">
+            <i class="fa-solid fa-expand text-[10px]"></i>
+            <span>상세 매뉴얼 & TV 화면 보기</span>
+          </button>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    // 4. 14개 반별 드라이브 & 발표회 선곡 허브
+    function renderClassHub() {
+      const container = document.getElementById('classHubGrid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      const savedSongs = localStorage.getItem('haesol2_songs_data');
+      const songList = savedSongs ? JSON.parse(savedSongs) : DEFAULT_SONGS;
+
+      songList.forEach(c => {
+        const card = document.createElement('div');
+        const isSet = c.song && !c.song.includes('미정');
+        card.className = `p-3 rounded-2xl border transition shadow-sm flex flex-col justify-between ${isSet ? 'bg-white border-purple-200' : 'bg-slate-50 border-slate-200'}`;
+
+        card.innerHTML = `
+          <div>
+            <div class="flex items-center justify-between mb-1">
+              <span class="font-black text-slate-800 text-sm">2-${c.classNum}반</span>
+              <span class="px-1.5 py-0.5 rounded text-[10px] font-bold ${isSet ? 'bg-purple-100 text-purple-700' : 'bg-slate-200 text-slate-600'}">${c.status}</span>
+            </div>
+            <div class="text-[11px] text-slate-600 mb-2 truncate" title="${c.song}">
+              <i class="fa-solid fa-music text-purple-500 mr-1"></i>${c.song}
+            </div>
+          </div>
+          <div class="space-y-1">
+            <a href="https://drive.google.com" target="_blank" class="w-full py-1 bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 rounded-lg font-semibold text-[10px] flex items-center justify-center gap-1 transition">
+              <i class="fa-brands fa-google-drive"></i>
+              <span>과제 드라이브</span>
+            </a>
+            <button onclick="editSongForClass(${c.classNum})" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg font-medium text-[10px] transition">
+              선곡 수정
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function editSongForClass(classNum) {
+      const savedSongs = localStorage.getItem('haesol2_songs_data');
+      let songList = savedSongs ? JSON.parse(savedSongs) : DEFAULT_SONGS;
+      const target = songList.find(s => s.classNum === classNum);
+
+      const newSong = prompt(`[2학년 ${classNum}반] 학급 발표회 곡명을 입력하세요.\n(중복 방지를 위해 다른 반과 겹치지 않는지 확인해 주세요!)`, target ? target.song : '');
+      if (newSong !== null && newSong.trim() !== '') {
+        target.song = newSong.trim();
+        target.status = "확정";
+        localStorage.setItem('haesol2_songs_data', JSON.stringify(songList));
+        renderClassHub();
+        showToast(`2학년 ${classNum}반 선곡이 [${newSong.trim()}]으로 등록되었습니다.`);
+      }
+    }
+
+    function addSongPrompt() {
+      const cNumStr = prompt("선곡을 등록할 학급 번호를 입력하세요 (1 ~ 14):");
+      const cNum = parseInt(cNumStr);
+      if (cNum >= 1 && cNum <= 14) {
+        editSongForClass(cNum);
+      } else if (cNumStr !== null) {
+        alert("1부터 14 사이의 학급 번호를 입력해 주세요.");
+      }
+    }
+
+    // 5. 통합 모달 로직 (교사 매뉴얼 vs 교실 TV 모드)
+    function openScheduleModal(itemId) {
+      const item = SCHEDULE_DATA.find(i => i.id === itemId);
+      if (!item) return;
+      currentModalItem = item;
+
+      // 헤더 설정
+      document.getElementById('modalTitle').textContent = item.title;
+      document.getElementById('modalCategoryBadge').textContent = item.catLabel;
+      document.getElementById('modalDateTime').textContent = `${item.date}(${item.day}) ${item.period}`;
+
+      // 교사 탭 내용
+      document.getElementById('modalStepBefore').textContent = item.before;
+      document.getElementById('modalStepDuring').textContent = item.during;
+      document.getElementById('modalStepAfter').textContent = item.after;
+
+      // 동영상 링크 버튼 영역
+      const videoArea = document.getElementById('modalVideoLinksArea');
+      videoArea.innerHTML = '';
+      if (item.id === '1218-p3') {
+        videoArea.innerHTML = `
+          <a href="https://drive.google.com/drive/u/0/folders/1tOma6EhbZReAMMBYOk7Q-DBAzkBpcafe" target="_blank" 
+             class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white rounded-xl font-bold flex items-center gap-1.5 shadow-sm transition">
+            <i class="fa-solid fa-play"></i>
+            <span>▶ 12/18 3교시 12분 샘플 영상 즉시 재생 (구글 드라이브)</span>
+          </a>
+        `;
+      }
+
+      // 하단 링크 목록
+      const linksList = document.getElementById('modalLinksList');
+      linksList.innerHTML = '';
+      if (item.links && item.links.length > 0) {
+        item.links.forEach(l => {
+          const a = document.createElement('a');
+          a.href = l.url;
+          a.target = "_blank";
+          a.className = "inline-flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-blue-50 text-blue-700 rounded-xl border border-slate-200 transition font-semibold text-xs";
+          a.innerHTML = `<i class="fa-solid fa-arrow-up-right-from-square text-[10px]"></i><span>${l.label}</span>`;
+          linksList.appendChild(a);
+        });
+      } else {
+        linksList.innerHTML = `<span class="text-slate-400 italic">등록된 추가 서식 링크가 없습니다.</span>`;
+      }
+
+      // TV 상영 모드 내용 렌더링
+      renderTvContent(item);
+
+      // 기본으로 교사 탭 활성화
+      switchModalInnerTab('teacher');
+
+      document.getElementById('scheduleModal').classList.remove('hidden');
+    }
+
+    function switchModalInnerTab(type) {
+      const teacherView = document.getElementById('modalTeacherView');
+      const tvView = document.getElementById('modalTvView');
+      const teacherBtn = document.getElementById('modalTabTeacherBtn');
+      const tvBtn = document.getElementById('modalTabTvBtn');
+
+      if (type === 'teacher') {
+        teacherView.classList.remove('hidden');
+        tvView.classList.add('hidden');
+        teacherBtn.className = "px-3 py-1 rounded-lg bg-blue-600 text-white font-semibold transition";
+        tvBtn.className = "px-3 py-1 rounded-lg text-slate-300 hover:text-white font-medium transition";
+      } else {
+        teacherView.classList.add('hidden');
+        tvView.classList.remove('hidden');
+        tvBtn.className = "px-3 py-1 rounded-lg bg-emerald-600 text-white font-semibold transition";
+        teacherBtn.className = "px-3 py-1 rounded-lg text-slate-300 hover:text-white font-medium transition";
+      }
+    }
+
+    // TV 상영 화면 레이아웃 (에코백 예시 사진 카드, 발표회 규칙, 영화제 미션 등)
+    function renderTvContent(item) {
+      const tvTitle = document.getElementById('tvTitle');
+      const tvSubtitle = document.getElementById('tvSubtitle');
+      const box = document.getElementById('tvContentBox');
+
+      tvTitle.textContent = item.title;
+
+      if (item.tvType === 'ecobag_step1') {
+        tvSubtitle.textContent = "[1교시] 탭으로 마음에 드는 시를 찾고 에코백 '뒷면'에 예쁘게 적어보세요!";
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div class="bg-amber-100 text-slate-800 rounded-2xl p-4 flex flex-col items-center text-center shadow-md">
+              <span class="px-2 py-0.5 rounded-full bg-amber-200 text-amber-900 font-bold text-xs mb-2">뒷면 예시 ①</span>
+              <p class="text-base font-serif font-black text-amber-950 mt-2">"꽃을 보듯<br>너를 본다"</p>
+              <span class="text-xs text-amber-800 mt-2">나태주 시인</span>
+            </div>
+            <div class="bg-indigo-100 text-slate-800 rounded-2xl p-4 flex flex-col items-center text-center shadow-md">
+              <span class="px-2 py-0.5 rounded-full bg-indigo-200 text-indigo-900 font-bold text-xs mb-2">뒷면 예시 ②</span>
+              <p class="text-base font-serif font-black text-indigo-950 mt-2">"오늘밤에도 별이<br>바람에 스치운다"</p>
+              <span class="text-xs text-indigo-800 mt-2">윤동주 시인</span>
+            </div>
+          </div>
+          <div class="p-3 bg-white/10 rounded-xl text-center text-amber-300 font-bold text-xs sm:text-sm">
+            🎁 1교시 열심히 참여하는 학생 5명에게 간식 지급!
+          </div>
+        `;
+      } else if (item.tvType === 'ecobag_step2') {
+        tvSubtitle.textContent = "[2교시] 앞면 그림을 꼼꼼하게 채색하여 나만의 에코백을 완성하세요!";
+        box.innerHTML = `
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-center">
+            <div class="bg-emerald-950/70 p-4 rounded-2xl border border-emerald-500/40">
+              <i class="fa-solid fa-palette text-3xl text-emerald-400 mb-2"></i>
+              <h4 class="font-bold text-emerald-200 text-sm">앞면 일러스트 채색</h4>
+              <p class="text-xs text-slate-300 mt-1">패브릭 마카로 번지지 않게 깔끔하게 색칠하기</p>
+            </div>
+            <div class="bg-orange-950/70 p-4 rounded-2xl border border-orange-500/40">
+              <i class="fa-solid fa-gift text-3xl text-orange-400 mb-2"></i>
+              <h4 class="font-bold text-orange-200 text-sm">완성 확인 간식</h4>
+              <p class="text-xs text-slate-300 mt-1">시간 내 완성 시 <strong>하리보 2개 + 자유시간 2개</strong> 지급!</p>
+            </div>
+          </div>
+          <p class="text-center text-xs text-slate-300">※ 수업 종료 후 바구니와 마카는 2학년부 교무실로 반납합니다.</p>
+        `;
+      } else if (item.tvType === 'festival_rules' || item.tvType === 'festival_practice') {
+        tvSubtitle.textContent = "합창, 플래시몹 등 학급 전원이 하나 되는 무대를 준비합니다!";
+        box.innerHTML = `
+          <div class="space-y-3 text-left">
+            <div class="p-3 bg-white/10 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-purple-500 text-white font-bold flex items-center justify-center shrink-0 text-xs">1</span>
+              <div>
+                <span class="font-bold text-purple-300">주도적 역할 분담:</span>
+                <p class="text-xs text-slate-300">회장, 부회장, 리더십 있는 친구들이 주도하고 안무 담당 및 음원 편집 담당을 즉시 정하세요.</p>
+              </div>
+            </div>
+            <div class="p-3 bg-white/10 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-purple-500 text-white font-bold flex items-center justify-center shrink-0 text-xs">2</span>
+              <div>
+                <span class="font-bold text-purple-300">선곡 우선권 원칙:</span>
+                <p class="text-xs text-slate-300">1곡 무조건 선정! 선곡은 <strong>먼저 결정하여 웹 포털에 등록한 반에게 우선권</strong>이 있습니다.</p>
+              </div>
+            </div>
+            <div class="p-3 bg-white/10 rounded-xl flex items-start gap-3">
+              <span class="w-6 h-6 rounded-full bg-purple-500 text-white font-bold flex items-center justify-center shrink-0 text-xs">3</span>
+              <div>
+                <span class="font-bold text-purple-300">공간 확보 및 원상복구:</span>
+                <p class="text-xs text-slate-300">5교시 연습 시 책상을 앞뒤로 밀고, 6교시 종료 전 반드시 원래대로 복구합니다.</p>
+              </div>
+            </div>
+          </div>
+        `;
+      } else {
+        tvSubtitle.textContent = item.during;
+        box.innerHTML = `
+          <div class="py-6 text-center space-y-2">
+            <i class="fa-solid fa-chalkboard-user text-4xl text-blue-400"></i>
+            <h3 class="text-base font-bold text-white">${item.title}</h3>
+            <p class="text-xs text-slate-300 max-w-md mx-auto whitespace-pre-line leading-relaxed">${item.during}</p>
+          </div>
+        `;
+      }
+    }
+
+    function toggleBrowserFullscreen() {
+      const el = document.getElementById('modalTvView');
+      if (!document.fullscreenElement) {
+        if (el.requestFullscreen) el.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function closeModal() {
+      document.getElementById('scheduleModal').classList.add('hidden');
+    }
+
+    // 6. 공지 띠배너 수정
+    function initTicker() {
+      const saved = localStorage.getItem('haesol2_urgent_ticker');
+      if (saved) {
+        document.getElementById('tickerText').innerHTML = saved;
+      }
+    }
+
+    function editTickerModal() {
+      const current = document.getElementById('tickerText').innerText;
+      const text = prompt("상단 띠배너에 노출할 긴급 공지 문구를 입력하세요:", current);
+      if (text !== null && text.trim() !== '') {
+        document.getElementById('tickerText').innerHTML = `📢 <strong>${text.trim()}</strong>`;
+        localStorage.setItem('haesol2_urgent_ticker', `📢 <strong>${text.trim()}</strong>`);
+        showToast("긴급 공지 띠배너가 업데이트되었습니다.");
+      }
+    }
+
+    // 7. 배포 가이드 모달
+    function openGitHubGuideModal() {
+      document.getElementById('githubGuideModal').classList.remove('hidden');
+    }
+    function closeGitHubGuideModal() {
+      document.getElementById('githubGuideModal').classList.add('hidden');
+    }
+
+    // 토스트 UI
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').textContent = msg;
+      toast.classList.remove('opacity-0', 'translate-y-10');
+      toast.classList.add('opacity-100', 'translate-y-0');
+      setTimeout(() => {
+        toast.classList.remove('opacity-100', 'translate-y-0');
+        toast.classList.add('opacity-0', 'translate-y-10');
+      }, 2500);
+    }
+
+    // 외부 클릭 시 모달 닫기
+    window.addEventListener('click', function(e) {
+      if (e.target === document.getElementById('scheduleModal')) closeModal();
+      if (e.target === document.getElementById('githubGuideModal')) closeGitHubGuideModal();
+    });
+  </script>
+</body>
+</html>
